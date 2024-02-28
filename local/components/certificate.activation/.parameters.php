@@ -42,7 +42,6 @@ if ($iblockExists)
 		[
 			"ACTIVE" => "Y",
 			"IBLOCK_ID" => $arCurrentValues["IBLOCK_ID"],
-			"USER_TYPE" => ["UserID", "DateTime"],
 			"MULTIPLE" => "Y",
 		]
 	);
