@@ -1,6 +1,13 @@
 <?php
 if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 
+use Bitrix\Main\Loader;
+
+if (!Loader::includeModule('iblock'))
+{
+	return;
+}
+
 /**
  * Bitrix vars
  *
@@ -63,6 +70,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				"EMAIL_TO" => $arParams["EMAIL_TO"],
 				"TEXT" => $_POST["MESSAGE"],
 			);
+			$res = CIBlockElement::GetList(
+				["ID" => "DESC"],
+				["IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "NAME" => $arFields["TEXT"]], 
+				false, 
+				false, 
+				["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
+			);
+
+			while($ar = $res->GetNext()){
+				echo "<pre>"; print_r($ar); echo "</pre>";
+			}
+			die();
+
 			if(!empty($arParams["EVENT_MESSAGE_ID"]))
 			{
 				foreach($arParams["EVENT_MESSAGE_ID"] as $v)
