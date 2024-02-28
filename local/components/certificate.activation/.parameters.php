@@ -50,7 +50,7 @@ if ($iblockExists)
 		if($arr["USER_TYPE"] === "UserID"){
 			$arPropertyUsers[$arr["CODE"]] = "[" . $arr["CODE"] . "] " . $arr["NAME"];
 		}
-		elseif($arr["USER_TYPE"] === "DateTime"){
+		elseif($arr["USER_TYPE"] === "Date"){
 			$arPropertyDates[$arr["CODE"]] = "[" . $arr["CODE"] . "] " . $arr["NAME"];
 		}
 	}
