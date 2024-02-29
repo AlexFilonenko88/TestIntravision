@@ -22,7 +22,7 @@ if (!Loader::includeModule('iblock'))
  */
 
 
-function addValueToPropertyEx ($arCertificates, $type) {
+function addValueToPropertyEx ($arCertificates, $arParams, $type) {
 	global $USER;
 	$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_" . $type] . "_VALUE"];
 	if($type === "USERS"){
@@ -98,12 +98,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}
 
 			if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
-				addValueToPropertyEx($arCertificates, "USERS");
-				addValueToPropertyEx($arCertificates, "DATES");
+				addValueToPropertyEx($arCertificates, $arParams, "USERS");
+				addValueToPropertyEx($arCertificates, $arParams, "DATES");
 			}
 			echo "<pre>";
 			print_r($arCertificates);
-			print_r(in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"]));
 			echo "</pre>";
 			
 			die();
