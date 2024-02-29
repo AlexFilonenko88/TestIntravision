@@ -4,6 +4,8 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 use Bitrix\Main\Loader;
 use Bitrix\Main\Type\Date;
 
+global $USER;
+
 if (!Loader::includeModule('iblock'))
 {
 	return;
@@ -18,6 +20,17 @@ if (!Loader::includeModule('iblock'))
  * @global CMain $APPLICATION
  * @global CUser $USER
  */
+
+
+function addValueToPropertyEx ($arCertificates, $type) {
+	$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_" . $type] . "_VALUE"];
+	if($type === "USERS"){
+		$value[] = $USER->GetID();
+	}elseif($type === "DATES"){
+		$value[] = new Date();
+	}
+	CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_" . $type] => $value]);
+}
 
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
 
@@ -82,14 +95,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			while($ar = $res->GetNext()){
 				$arCertificates[]=$ar;
 			}
-			$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"];
-			$value[] = 1;
-			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_USERS"] => $value]);
 
-			$value2 = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_DATES"] . "_VALUE"];
-			$value2[] = new Date();
-			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_DATES"] => $value2]);
-
+			if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
+				addValueToPropertyEx($arCertificates, "USERS");
+				addValueToPropertyEx($arCertificates, "DATES");
+			}
 			echo "<pre>";
 			print_r($arCertificates);
 			print_r($value);
