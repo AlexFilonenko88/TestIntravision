@@ -77,10 +77,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				false, 
 				["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
 			);
-
+			$arCertificates = [];
 			while($ar = $res->GetNext()){
-				echo "<pre>"; print_r($ar); echo "</pre>";
+				$arCertificates[]=$ar;
 			}
+			$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"]];
+			$value[] = ["VALUE" => 1];
+			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_USERS"] => $value]);
+
+			echo "<pre>";
+			print_r($arCertificates);
+			print_r($value);
+			echo "</pre>";
+			
 			die();
 
 			if(!empty($arParams["EVENT_MESSAGE_ID"]))
