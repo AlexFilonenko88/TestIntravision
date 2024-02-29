@@ -56,7 +56,9 @@ $res = CIBlockElement::GetList(
 
 while($ar = $res->GetNext()){
 	if(in_array($USER->GetID(), $ar["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
-		$arResult["CERTIFICATES"][] = $ar;
+		$arResult["CERTIFICATES"]["ACTIVATED"][] = $ar;
+	}else{
+		$arResult["CERTIFICATES"]["NOT_ACTIVATED"][] = $ar;
 	}
 }
 
