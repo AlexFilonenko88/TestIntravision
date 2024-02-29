@@ -81,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			while($ar = $res->GetNext()){
 				$arCertificates[]=$ar;
 			}
-			$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"]];
+			$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"];
 			$value[] = ["VALUE" => 1];
 			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_USERS"] => $value]);
 
