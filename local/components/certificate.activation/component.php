@@ -2,6 +2,7 @@
 if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 
 use Bitrix\Main\Loader;
+use Bitrix\Main\Type\Date;
 
 if (!Loader::includeModule('iblock'))
 {
@@ -84,6 +85,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"];
 			$value[] = 1;
 			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_USERS"] => $value]);
+
+			$value2 = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_DATES"] . "_VALUE"];
+			$value2[] = new Date();
+			CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_DATES"] => $value2]);
 
 			echo "<pre>";
 			print_r($arCertificates);
