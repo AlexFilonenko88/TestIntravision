@@ -46,6 +46,22 @@ $arParams["OK_TEXT"] = trim($arParams["OK_TEXT"]);
 if($arParams["OK_TEXT"] == '')
 	$arParams["OK_TEXT"] = GetMessage("MF_OK_MESSAGE");
 
+$res = CIBlockElement::GetList(
+	["ID" => "DESC"],
+	["IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y"], 
+	false, 
+	false, 
+	["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
+);
+
+while($ar = $res->GetNext()){
+	if(in_array($USER->GetID(), $ar["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
+		$arResult["CERTIFICATES"][] = $ar;
+	}
+}
+
+print_r($arResult["CERTIFICATES"]);
+
 if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_POST["PARAMS_HASH"]) || $arResult["PARAMS_HASH"] === $_POST["PARAMS_HASH"]))
 {
 	$arResult["ERROR_MESSAGE"] = array();
