@@ -103,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}
 			echo "<pre>";
 			print_r($arCertificates);
-			print_r($value);
+			print_r(in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"]));
 			echo "</pre>";
 			
 			die();
