@@ -23,6 +23,7 @@ if (!Loader::includeModule('iblock'))
 
 
 function addValueToPropertyEx ($arCertificates, $type) {
+	global $USER;
 	$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_" . $type] . "_VALUE"];
 	if($type === "USERS"){
 		$value[] = $USER->GetID();
