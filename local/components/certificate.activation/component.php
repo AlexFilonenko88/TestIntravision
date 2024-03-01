@@ -98,8 +98,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				$arResult["ERROR_MESSAGE"][] = GetMessage("MF_CAPTHCA_EMPTY");
 
 		}
-		if(empty($arResult["ERROR_MESSAGE"]))
-		{
+		if(empty($arResult["ERROR_MESSAGE"])){
 			$arFields = Array(
 				"CERTIFICATE" => htmlspecialcharsbx($_POST["certificate"]),
 				"EMAIL_TO" => $USER->GetEmail(),
@@ -122,7 +121,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			var_dump($arCertificatesNotActivated);
 			var_dump($arCertificatesActivated);
 			echo "</pre>";
-
+		}
+		if(empty($arResult["ERROR_MESSAGE"]))
+		{
 			if(!empty($arParams["EVENT_MESSAGE_ID"]))
 			{
 				foreach($arParams["EVENT_MESSAGE_ID"] as $v)
