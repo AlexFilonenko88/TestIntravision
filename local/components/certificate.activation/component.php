@@ -138,8 +138,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}
 
 			echo "<pre>";
-			print_r($arCertificatesNotActivated);
-			print_r($arCertificatesActivated);
+			var_dump($arCertificatesNotActivated);
+			var_dump($arCertificatesActivated);
 			echo "</pre>";
 			
 			die();
