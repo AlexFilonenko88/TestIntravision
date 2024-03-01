@@ -75,24 +75,14 @@ while($ar = $res->GetNext()){
 	}
 }
 
-print_r($arResult["CERTIFICATES"]);
-
 if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_POST["PARAMS_HASH"]) || $arResult["PARAMS_HASH"] === $_POST["PARAMS_HASH"]))
 {
 	$arResult["ERROR_MESSAGE"] = array();
 	if(check_bitrix_sessid())
 	{
-		if(empty($arParams["REQUIRED_FIELDS"]) || !in_array("NONE", $arParams["REQUIRED_FIELDS"]))
-		{
-			if((empty($arParams["REQUIRED_FIELDS"]) || in_array("NAME", $arParams["REQUIRED_FIELDS"])) && mb_strlen($_POST["user_name"]) <= 1)
-				$arResult["ERROR_MESSAGE"][] = GetMessage("MF_REQ_NAME");
-			if((empty($arParams["REQUIRED_FIELDS"]) || in_array("EMAIL", $arParams["REQUIRED_FIELDS"])) && mb_strlen($_POST["user_email"]) <= 1)
-				$arResult["ERROR_MESSAGE"][] = GetMessage("MF_REQ_EMAIL");
-			if((empty($arParams["REQUIRED_FIELDS"]) || in_array("MESSAGE", $arParams["REQUIRED_FIELDS"])) && mb_strlen($_POST["MESSAGE"]) <= 3)
-				$arResult["ERROR_MESSAGE"][] = GetMessage("MF_REQ_MESSAGE");
+		if(mb_strlen($_POST["certificate"]) <= 1){
+			$arResult["ERROR_MESSAGE"][] = "Вы не ввели номер сертификата";
 		}
-		if(mb_strlen($_POST["user_email"]) > 1 && !check_email($_POST["user_email"]))
-			$arResult["ERROR_MESSAGE"][] = GetMessage("MF_EMAIL_NOT_VALID");
 		if($arParams["USE_CAPTCHA"] == "Y")
 		{
 			$captcha_code = $_POST["captcha_sid"];
@@ -111,38 +101,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 		if(empty($arResult["ERROR_MESSAGE"]))
 		{
 			$arFields = Array(
-				"AUTHOR" => $_POST["user_name"],
-				"AUTHOR_EMAIL" => $_POST["user_email"],
-				"EMAIL_TO" => $arParams["EMAIL_TO"],
-				"TEXT" => $_POST["MESSAGE"],
+				"CERTIFICATE" => htmlspecialcharsbx($_POST["certificate"]),
+				"EMAIL_TO" => $USER->GetEmail(),
 			);
-			// $res = CIBlockElement::GetList(
-			// 	["ID" => "DESC"],
-			// 	["IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "NAME" => $arFields["TEXT"]], 
-			// 	false, 
-			// 	false, 
-			// 	["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
-			// );
-			// $arCertificates = [];
-			// while($ar = $res->GetNext()){
-			// 	$arCertificates[]=$ar;
-			// }
 
-			$arCertificatesActivated = getCertificateByName($arResult["CERTIFICATES"]["ACTIVATED"], $arFields["TEXT"], $arParams);
-			$arCertificatesNotActivated = getCertificateByName($arResult["CERTIFICATES"]["NOT_ACTIVATED"], $arFields["TEXT"], $arParams);
+			$arCertificatesActivated = getCertificateByName($arResult["CERTIFICATES"]["ACTIVATED"], $arFields["CERTIFICATE"], $arParams);
+			$arCertificatesNotActivated = getCertificateByName($arResult["CERTIFICATES"]["NOT_ACTIVATED"], $arFields["CERTIFICATE"], $arParams);
 
-			// if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
 			if($arCertificatesNotActivated){
 				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "USERS");
 				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "DATES");
+				$arResult["SUCCESS_MESSAGE"] = "Сертификат " .  $arFields["CERTIFICATE"] . " активирован";
+			}elseif($arCertificatesActivated){
+				$arResult["ERROR_MESSAGE"]["IS_ACTIVATED"] = "Сертификат с таким именем уже активирован";
+			}else{
+				$arResult["ERROR_MESSAGE"]["NOT_FOUND"] = "Сертификат с таким именем не существует";
 			}
 
 			echo "<pre>";
 			var_dump($arCertificatesNotActivated);
 			var_dump($arCertificatesActivated);
 			echo "</pre>";
-			
-			die();
 
 			if(!empty($arParams["EVENT_MESSAGE_ID"]))
 			{
@@ -152,16 +131,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}
 			else
 				CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields);
-			$_SESSION["MF_NAME"] = htmlspecialcharsbx($_POST["user_name"]);
-			$_SESSION["MF_EMAIL"] = htmlspecialcharsbx($_POST["user_email"]);
+			$_SESSION["MF_EMAIL"] = $USER->GetEmail();
 			$event = new \Bitrix\Main\Event('main', 'onFeedbackFormSubmit', $arFields);
 			$event->send();
 			LocalRedirect($APPLICATION->GetCurPageParam("success=".$arResult["PARAMS_HASH"], Array("success")));
 		}
 
-		$arResult["MESSAGE"] = htmlspecialcharsbx($_POST["MESSAGE"]);
-		$arResult["AUTHOR_NAME"] = htmlspecialcharsbx($_POST["user_name"]);
-		$arResult["AUTHOR_EMAIL"] = htmlspecialcharsbx($_POST["user_email"]);
+		$arResult["CERTIFICATE"] = htmlspecialcharsbx($_POST["certificate"]);
 	}
 	else
 		$arResult["ERROR_MESSAGE"][] = GetMessage("MF_SESS_EXP");

@@ -24,24 +24,11 @@ if($arResult["OK_MESSAGE"] <> '')
 
 <form action="<?=POST_FORM_ACTION_URI?>" method="POST">
 <?=bitrix_sessid_post()?>
-	<div class="mf-name">
+	<div class="mf-certificate">
 		<div class="mf-text">
-			<?=GetMessage("MFT_NAME")?><?if(empty($arParams["REQUIRED_FIELDS"]) || in_array("NAME", $arParams["REQUIRED_FIELDS"])):?><span class="mf-req">*</span><?endif?>
+			<?=GetMessage("MFT_NAME")?><span class="mf-req">*</span>
 		</div>
-		<input type="text" name="user_name" value="<?=$arResult["AUTHOR_NAME"]?>">
-	</div>
-	<div class="mf-email">
-		<div class="mf-text">
-			<?=GetMessage("MFT_EMAIL")?><?if(empty($arParams["REQUIRED_FIELDS"]) || in_array("EMAIL", $arParams["REQUIRED_FIELDS"])):?><span class="mf-req">*</span><?endif?>
-		</div>
-		<input type="text" name="user_email" value="<?=$arResult["AUTHOR_EMAIL"]?>">
-	</div>
-
-	<div class="mf-message">
-		<div class="mf-text">
-			<?=GetMessage("MFT_MESSAGE")?><?if(empty($arParams["REQUIRED_FIELDS"]) || in_array("MESSAGE", $arParams["REQUIRED_FIELDS"])):?><span class="mf-req">*</span><?endif?>
-		</div>
-		<textarea name="MESSAGE" rows="5" cols="40"><?=$arResult["MESSAGE"]?></textarea>
+		<input type="text" name="certificate" value="<?=$arResult["CERTIFICATE"]?>">
 	</div>
 
 	<?if($arParams["USE_CAPTCHA"] == "Y"):?>
