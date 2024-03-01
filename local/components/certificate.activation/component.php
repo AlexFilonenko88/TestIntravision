@@ -49,6 +49,15 @@ function getCertificateByName ($arCertificates, $name, $arParams) {
 	}
 }
 
+function getFileIdBySrc($strFilename){
+    $strUploadDir = '/'.\Bitrix\Main\Config\Option::get('main', 'upload_dir').'/';
+    $strFile = substr($strFilename, strlen($strUploadDir));
+    $strSql = "SELECT ID FROM b_file WHERE CONCAT(SUBDIR, '/', FILE_NAME) = '{$strFile}'";
+    return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
+}
+
+$arFiles[] = getFileIdBySrc("/upload/pdf.pdf");
+
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
 
 $arParams["USE_CAPTCHA"] = (($arParams["USE_CAPTCHA"] != "N" && !$USER->IsAuthorized()) ? "Y" : "N");
@@ -131,10 +140,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			{
 				foreach($arParams["EVENT_MESSAGE_ID"] as $v)
 					if(intval($v) > 0)
-						CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields, "N", intval($v));
+						CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields, "N", intval($v), $arFiles);
 			}
 			else
-				CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields);
+				CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields, "N", "", $arFiles);
 			$_SESSION["MF_EMAIL"] = $USER->GetEmail();
 			$event = new \Bitrix\Main\Event('main', 'onFeedbackFormSubmit', $arFields);
 			$event->send();
