@@ -6,6 +6,9 @@ use Bitrix\Main\Type\Date;
 
 global $USER;
 
+if(!$USER->IsAuthorized()){
+	return;
+}
 if (!Loader::includeModule('iblock'))
 {
 	return;
