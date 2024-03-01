@@ -132,7 +132,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			$arCertificatesNotActivated = getCertificateByName($arResult["CERTIFICATES"]["NOT_ACTIVATED"], $arFields["TEXT"], $arParams);
 
 			// if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
-			if(in_array($USER->GetID(), $arCertificatesNotActivated["ACTIVATED_USERS"])){
+			if($arCertificatesNotActivated){
 				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "USERS");
 				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "DATES");
 			}
