@@ -57,6 +57,7 @@ function getFileIdBySrc($strFilename){
 }
 
 $arFiles[] = getFileIdBySrc("/upload/pdf.pdf");
+var_dump($arFiles);
 
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
 
