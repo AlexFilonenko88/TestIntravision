@@ -24,13 +24,26 @@ if (!Loader::includeModule('iblock'))
 
 function addValueToPropertyEx ($arCertificates, $arParams, $type) {
 	global $USER;
-	$value = $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_" . $type] . "_VALUE"];
+	$value = $arCertificates["ACTIVATED_" . $type];
 	if($type === "USERS"){
 		$value[] = $USER->GetID();
 	}elseif($type === "DATES"){
 		$value[] = new Date();
 	}
-	CIBlockElement::SetPropertyValuesEx($arCertificates[0]["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_" . $type] => $value]);
+	CIBlockElement::SetPropertyValuesEx($arCertificates["ID"], $arParams["IBLOCK_ID"], [$arParams["ACTIVATED_" . $type] => $value]);
+}
+
+function getCertificateByName ($arCertificates, $name, $arParams) {
+	foreach($arCertificates as $certificate){
+		if($certificate["NAME"] === $name){
+			return [
+				"ID" => $certificate["ID"],
+				"NAME" => $certificate["NAME"],
+				"ACTIVATED_USERS" => $certificate["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"],
+				"ACTIVATED_DATES" => $certificate["PROPERTY_" . $arParams["ACTIVATED_DATES"] . "_VALUE"],
+			];
+		}
+	}
 }
 
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
@@ -103,24 +116,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				"EMAIL_TO" => $arParams["EMAIL_TO"],
 				"TEXT" => $_POST["MESSAGE"],
 			);
-			$res = CIBlockElement::GetList(
-				["ID" => "DESC"],
-				["IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "NAME" => $arFields["TEXT"]], 
-				false, 
-				false, 
-				["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
-			);
-			$arCertificates = [];
-			while($ar = $res->GetNext()){
-				$arCertificates[]=$ar;
+			// $res = CIBlockElement::GetList(
+			// 	["ID" => "DESC"],
+			// 	["IBLOCK_ID" => $arParams["IBLOCK_ID"], "ACTIVE" => "Y", "NAME" => $arFields["TEXT"]], 
+			// 	false, 
+			// 	false, 
+			// 	["IBLOCK_ID", "ID", "NAME", "PROPERTY_" . $arParams["ACTIVATED_USERS"], "PROPERTY_" . $arParams["ACTIVATED_DATES"]]
+			// );
+			// $arCertificates = [];
+			// while($ar = $res->GetNext()){
+			// 	$arCertificates[]=$ar;
+			// }
+
+			$arCertificatesActivated = getCertificateByName($arResult["CERTIFICATES"]["ACTIVATED"], $arFields["TEXT"], $arParams);
+			$arCertificatesNotActivated = getCertificateByName($arResult["CERTIFICATES"]["NOT_ACTIVATED"], $arFields["TEXT"], $arParams);
+
+			// if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
+			if(in_array($USER->GetID(), $arCertificatesNotActivated["ACTIVATED_USERS"])){
+				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "USERS");
+				addValueToPropertyEx($arCertificatesNotActivated, $arParams, "DATES");
 			}
 
-			if(!in_array($USER->GetID(), $arCertificates[0]["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"])){
-				addValueToPropertyEx($arCertificates, $arParams, "USERS");
-				addValueToPropertyEx($arCertificates, $arParams, "DATES");
-			}
 			echo "<pre>";
-			print_r($arCertificates);
+			print_r($arCertificatesNotActivated);
+			print_r($arCertificatesActivated);
 			echo "</pre>";
 			
 			die();
