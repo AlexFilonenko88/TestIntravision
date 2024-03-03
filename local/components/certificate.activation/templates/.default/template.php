@@ -10,6 +10,13 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
  * @global CUser $USER
  */
 ?>
+
+<?php
+foreach($arResult["CERTIFICATES"]["ACTIVATED"] as $activated){
+	echo "<div>" .  $activated["NAME"] . "</div>";
+}
+?>
+
 <div class="mfeedback">
 <?if(!empty($arResult["ERROR_MESSAGE"]))
 {
