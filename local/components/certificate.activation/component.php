@@ -88,9 +88,9 @@ while($ar = $res->GetNext()){
 	}
 }
 
-echo "<pre>";
+// echo "<pre>";
 print_r($arResult["CERTIFICATES"]["ACTIVATED"]["NAME"]);
-echo "</pre>";
+// echo "</pre>";
 // echo "<br>";
 // echo "<pre>";
 // var_dump($arResult["CERTIFICATES"]["ACTIVATED"]["PROPERTY_ACTIVATE_DATE_VALUE"]);
