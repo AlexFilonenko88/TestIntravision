@@ -7,6 +7,8 @@ $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
 
 $pdf->SetTitle('Сертификат');
 
+$pdf->SetFont('dejavusans', '', 10);
+
 $html = "<h1> Example </h1>";
 
 $pdf->writeHTML($html, true, false, true, false, '');
