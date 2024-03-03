@@ -15,7 +15,7 @@ $html = "<h1> Example </h1>";
 
 $pdf->writeHTML($html, true, false, true, false, '');
 
-$pdf->Output($_SERVER['DOCUMENT_ROOT'] .'/upload/file.pdf', 'FI');
+$pdf->Output($_SERVER['DOCUMENT_ROOT'] .'/upload/file.pdf', 'I');
 
 
 use Bitrix\Main\Loader;
