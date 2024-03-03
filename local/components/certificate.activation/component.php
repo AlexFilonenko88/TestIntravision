@@ -88,13 +88,15 @@ while($ar = $res->GetNext()){
 	}
 }
 
-// echo "<pre>";
-print_r($arResult["CERTIFICATES"]["ACTIVATED"]["NAME"]);
-// echo "</pre>";
-// echo "<br>";
-// echo "<pre>";
-// var_dump($arResult["CERTIFICATES"]["ACTIVATED"]["PROPERTY_ACTIVATE_DATE_VALUE"]);
-// echo "</pre>";
+echo "<pre>";
+var_dump($arResult["CERTIFICATES"]["ACTIVATED"]["NAME"]);
+echo "</pre>";
+
+echo "<br>";
+
+echo "<pre>";
+var_dump($arFiles);
+echo "</pre>";
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_POST["PARAMS_HASH"]) || $arResult["PARAMS_HASH"] === $_POST["PARAMS_HASH"]))
 {
