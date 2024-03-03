@@ -13,14 +13,9 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 
 <?php
 foreach($arResult["CERTIFICATES"]["ACTIVATED"] as $activated){
-	echo "<div>" .  $activated["NAME"] . "</div>";
 	$i = array_search($USER->GetID(), $activated["PROPERTY_" . $arParams["ACTIVATED_USERS"] . "_VALUE"]);
-	echo $activated["PROPERTY_" . $arParams["ACTIVATED_DATES"] . "_VALUE"][$i];
+	echo "<div>" .  $activated["NAME"] . " (" . $activated["PROPERTY_" . $arParams["ACTIVATED_DATES"] . "_VALUE"][$i]  . ")</div>";
 }
-
-echo "<pre>";
-var_dump($arResult["CERTIFICATES"]["ACTIVATED"]);
-echo "</pre>";
 ?>
 
 <div class="mfeedback">
