@@ -9,6 +9,8 @@ $pdf->SetTitle('Сертификат');
 
 $pdf->SetFont('dejavusans', '', 10);
 
+$pdf->AddPage();
+
 $html = "<h1> Example </h1>";
 
 $pdf->writeHTML($html, true, false, true, false, '');
