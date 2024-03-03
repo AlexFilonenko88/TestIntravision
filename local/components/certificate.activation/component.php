@@ -124,7 +124,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 		}
 		if(empty($arResult["ERROR_MESSAGE"]))
 		{
-			
+			ob_end_clean();
 			$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
 			$pdf->SetTitle('Сертификат');
 			$pdf->SetFont('dejavusans', '', 10);
