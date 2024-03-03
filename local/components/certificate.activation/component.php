@@ -89,7 +89,7 @@ while($ar = $res->GetNext()){
 }
 
 echo "<pre>";
-var_dump($arResult["CERTIFICATES"]["ACTIVATED"]["NAME"]);
+var_dump($arResult["CERTIFICATES"]);
 echo "</pre>";
 // echo "<br>";
 // echo "<pre>";
