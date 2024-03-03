@@ -88,7 +88,9 @@ while($ar = $res->GetNext()){
 	}
 }
 
+echo "<pre>";
 var_dump($arResult["CERTIFICATES"]["ACTIVATED"]);
+echo "</pre>";
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_POST["PARAMS_HASH"]) || $arResult["PARAMS_HASH"] === $_POST["PARAMS_HASH"]))
 {
