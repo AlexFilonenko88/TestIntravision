@@ -49,15 +49,16 @@ function getCertificateByName ($arCertificates, $name, $arParams) {
 	}
 }
 
-function getFileIdBySrc($strFilename){
-    $strUploadDir = '/'.\Bitrix\Main\Config\Option::get('main', 'upload_dir').'/';
-    $strFile = substr($strFilename, strlen($strUploadDir));
-    $strSql = "SELECT ID FROM b_file WHERE CONCAT(SUBDIR, '/', FILE_NAME) = '{$strFile}'";
-    return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
-}
+// function getFileIdBySrc($strFilename){
+//     $strUploadDir = '/'.\Bitrix\Main\Config\Option::get('main', 'upload_dir').'/';
+//     $strFile = substr($strFilename, strlen($strUploadDir));
+//     $strSql = "SELECT ID FROM b_file WHERE CONCAT(SUBDIR, '/', FILE_NAME) = '{$strFile}'";
+//     return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
+// }
 
-$arFiles[] = getFileIdBySrc("/upload/pdf.pdf");
-// var_dump($arFiles);
+$fileId = CFile::SaveFile(["name" => 'сертификат.pdf', "tmp_name" => 'pdf.pdf', "old_file" => '0', "del" => "N", "MODULE_ID" => "", "description" => ""], '', false, false);
+
+$arFiles[] = $fileId;
 
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
 
@@ -87,13 +88,6 @@ while($ar = $res->GetNext()){
 		$arResult["CERTIFICATES"]["NOT_ACTIVATED"][] = $ar;
 	}
 }
-
-
-// echo "<br>";
-
-// echo "<pre>";
-// var_dump($arFiles);
-// echo "</pre>";
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_POST["PARAMS_HASH"]) || $arResult["PARAMS_HASH"] === $_POST["PARAMS_HASH"]))
 {
@@ -186,5 +180,7 @@ if(empty($arResult["ERROR_MESSAGE"]))
 
 if($arParams["USE_CAPTCHA"] == "Y")
 	$arResult["capCode"] =  htmlspecialcharsbx($APPLICATION->CaptchaGetCode());
+
+CFile::Delete($fileId);
 
 $this->IncludeComponentTemplate();
