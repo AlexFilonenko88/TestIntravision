@@ -1,5 +1,25 @@
 <?php
 if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
+include($_SERVER["DOCUMENT_ROOT"] . "/local/php_interface/mpdf/mpdf.php");
+
+
+
+$html = '<div>Здесь содержимое PDF в виде html-кода.<br>Спасибо RushStudio.by за помощь.</div>';
+
+//настройки для работы с кириллическими символами
+
+$mpdf = new mPDF('utf-8', 'A4', '10', 'Arial');
+
+$mpdf->charset_in = 'utf-8'; 
+
+//генерируем PDF
+
+$mpdf->WriteHTML($html);
+
+$mpdf->Output();
+
+
+
 
 use Bitrix\Main\Loader;
 use Bitrix\Main\Type\Date;
