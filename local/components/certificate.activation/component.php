@@ -57,7 +57,7 @@ function getCertificateByName ($arCertificates, $name, $arParams) {
 // }
 
 $fileId = CFile::SaveFile(["name" => 'сертификат.pdf', "tmp_name" => 'pdf.pdf', "old_file" => '0', "del" => "N", "MODULE_ID" => "", "description" => ""], '', false, false);
-
+var_dump($fileId);
 $arFiles[] = $fileId;
 
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
