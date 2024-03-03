@@ -49,31 +49,6 @@ function getCertificateByName ($arCertificates, $name, $arParams) {
 	}
 }
 
-// function getFileIdBySrc($strFilename){
-//     $strUploadDir = '/'.\Bitrix\Main\Config\Option::get('main', 'upload_dir').'/';
-//     $strFile = substr($strFilename, strlen($strUploadDir));
-//     $strSql = "SELECT ID FROM b_file WHERE CONCAT(SUBDIR, '/', FILE_NAME) = '{$strFile}'";
-//     return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
-// }
-
-$file = CFile::MakeFileArray(
-    $_SERVER['DOCUMENT_ROOT'] . '/upload/pdf.pdf',
-    false,
-    false,
-    ''
-);
-
-$fileId = CFile::SaveFile(
-    $file,
-    '/tmp',
-    false,
-    false
-);
-
-//$fileId = CFile::SaveFile(["name" => 'сертификат.pdf', "tmp_name" => '/tmp', "old_file" => '0', "del" => "N", "MODULE_ID" => "", "description" => ""], '/pdf.pdf', false, false);
-var_dump($fileId);
-$arFiles[] = $fileId;
-
 $arResult["PARAMS_HASH"] = md5(serialize($arParams).$this->GetTemplateName());
 
 $arParams["USE_CAPTCHA"] = (($arParams["USE_CAPTCHA"] != "N" && !$USER->IsAuthorized()) ? "Y" : "N");
@@ -144,14 +119,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}else{
 				$arResult["ERROR_MESSAGE"]["NOT_FOUND"] = "Сертификат с таким именем не существует";
 			}
-
-			echo "<pre>";
-			var_dump($arCertificatesNotActivated);
-			var_dump($arCertificatesActivated);
-			echo "</pre>";
+			
 		}
 		if(empty($arResult["ERROR_MESSAGE"]))
 		{
+			$file = CFile::MakeFileArray(
+				$_SERVER['DOCUMENT_ROOT'] . '/upload/pdf.pdf',
+				false,
+				false,
+				''
+			);
+			
+			$fileId = CFile::SaveFile(
+				$file,
+				'/tmp',
+				false,
+				false
+			);
+			
+			$arFiles[] = $fileId;
+
 			if(!empty($arParams["EVENT_MESSAGE_ID"]))
 			{
 				foreach($arParams["EVENT_MESSAGE_ID"] as $v)
@@ -163,6 +150,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			$_SESSION["MF_EMAIL"] = $USER->GetEmail();
 			$event = new \Bitrix\Main\Event('main', 'onFeedbackFormSubmit', $arFields);
 			$event->send();
+			CFile::Delete($fileId);
 			LocalRedirect($APPLICATION->GetCurPageParam("success=".$arResult["PARAMS_HASH"], Array("success")));
 		}
 
@@ -194,7 +182,5 @@ if(empty($arResult["ERROR_MESSAGE"]))
 
 if($arParams["USE_CAPTCHA"] == "Y")
 	$arResult["capCode"] =  htmlspecialcharsbx($APPLICATION->CaptchaGetCode());
-
-CFile::Delete($fileId);
 
 $this->IncludeComponentTemplate();
