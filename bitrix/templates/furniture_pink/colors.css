@@ -21,7 +21,7 @@ a.feedback-icon { background: url(images/icons-sprite.gif) no-repeat 0 -29px; }
 #banner-overlay { background: url(images/overlay.png) no-repeat; }
 #banner-slogan { color: #D15059; background: url(images/overlay.png) no-repeat right top;}
 
-div.content-block { background: #FFF1F2 url(images/sidebar-corners.gif) no-repeat left top; }
+div.content-block { background: #D2691E url(images/sidebar-corners.gif) no-repeat left top; }
 div.content-block-inner { background: url(images/sidebar-corners.gif) no-repeat right bottom;}
 
 #search div.search-inner-box { border-color: #DEDEDE; }
