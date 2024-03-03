@@ -56,7 +56,7 @@ function getCertificateByName ($arCertificates, $name, $arParams) {
 //     return \Bitrix\Main\Application::getConnection()->query($strSql)->fetch()['ID'];
 // }
 
-$fileId = CFile::SaveFile(["name" => 'сертификат.pdf', "tmp_name" => '', "old_file" => '0', "del" => "N", "MODULE_ID" => "", "description" => ""], '/pdf.pdf', false, false);
+$fileId = CFile::SaveFile(["name" => 'сертификат.pdf', "old_file" => '0', "del" => "N", "MODULE_ID" => "", "description" => ""], '/pdf.pdf', false, false);
 var_dump($fileId);
 $arFiles[] = $fileId;
 
