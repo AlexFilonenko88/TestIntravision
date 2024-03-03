@@ -1,5 +1,5 @@
 <?
-$MESS ['MFT_NAME'] = "Ваше имя";
+$MESS ['MFT_NAME'] = "Сертификат";
 $MESS ['MFT_EMAIL'] = "Ваш E-mail";
 $MESS ['MFT_MESSAGE'] = "Сообщение";
 $MESS ['MFT_CAPTCHA'] = "Защита от автоматических сообщений";
