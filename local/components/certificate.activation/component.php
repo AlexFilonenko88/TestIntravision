@@ -160,7 +160,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			$_SESSION["MF_EMAIL"] = $USER->GetEmail();
 			$event = new \Bitrix\Main\Event('main', 'onFeedbackFormSubmit', $arFields);
 			$event->send();
-			CFile::Delete($fileId);
+			// CFile::Delete($fileId);
 			LocalRedirect($APPLICATION->GetCurPageParam("success=".$arResult["PARAMS_HASH"], Array("success")));
 		}
 
@@ -192,5 +192,9 @@ if(empty($arResult["ERROR_MESSAGE"]))
 
 if($arParams["USE_CAPTCHA"] == "Y")
 	$arResult["capCode"] =  htmlspecialcharsbx($APPLICATION->CaptchaGetCode());
+
+if($fileId){
+	CFile::Delete($fileId);
+}
 
 $this->IncludeComponentTemplate();
