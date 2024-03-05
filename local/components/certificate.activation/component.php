@@ -168,7 +168,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			$event = new \Bitrix\Main\Event('main', 'onFeedbackFormSubmit', $arFields);
 			$event->send();
 			// CFile::Delete($fileId);
-			LocalRedirect($APPLICATION->GetCurPageParam("success=".$arResult["PARAMS_HASH"], Array("success")));
+			// LocalRedirect($APPLICATION->GetCurPageParam("success=".$arResult["PARAMS_HASH"], Array("success")));
 		}
 
 		$arResult["CERTIFICATE"] = htmlspecialcharsbx($_POST["certificate"]);
