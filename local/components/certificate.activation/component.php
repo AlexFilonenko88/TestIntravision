@@ -124,14 +124,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 		}
 		if(empty($arResult["ERROR_MESSAGE"]))
 		{
-			ob_end_clean();
-			$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
-			$pdf->SetTitle('Сертификат');
-			$pdf->SetFont('dejavusans', '', 10);
-			$pdf->AddPage();
-			$html = "<h1> Сертификат </h1><br><br><hr><br><br>" . $arFields["CERTIFICATE"] . " (" .  new Date() . ")";
-			$pdf->writeHTML($html, true, false, true, false, '');
-			$pdf->Output($_SERVER['DOCUMENT_ROOT'] .'/upload/pdf.pdf', 'F');
+			// ob_end_clean();
+			// $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
+			// $pdf->SetTitle('Сертификат');
+			// $pdf->SetFont('dejavusans', '', 10);
+			// $pdf->AddPage();
+			// $html = "<h1> Сертификат </h1><br><br><hr><br><br>" . $arFields["CERTIFICATE"] . " (" .  new Date() . ")";
+			// $pdf->writeHTML($html, true, false, true, false, '');
+			// $pdf->Output($_SERVER['DOCUMENT_ROOT'] .'/upload/pdf.pdf', 'F');
 
 			$file = CFile::MakeFileArray(
 				$_SERVER['DOCUMENT_ROOT'] . '/upload/pdf.pdf',
