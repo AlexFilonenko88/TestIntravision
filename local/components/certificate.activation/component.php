@@ -154,7 +154,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				foreach($arParams["EVENT_MESSAGE_ID"] as $v){
 					if(intval($v) > 0){
 						// CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields, "N", intval($v), $arFiles);
-						\Bitrix\Main\Mail\Event::send([
+						\Bitrix\Main\Mail\Event::sendImmediate([
 							'EVENT_NAME' => $arParams["EVENT_NAME"],
 							"LID" => SITE_ID,
 							"C_FIELDS" => $arFields,
@@ -165,7 +165,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 			}
 			else{
 				// CEvent::Send($arParams["EVENT_NAME"], SITE_ID, $arFields, "N", "", $arFiles);
-				\Bitrix\Main\Mail\Event::send([
+				\Bitrix\Main\Mail\Event::sendImmediate([
 					'EVENT_NAME' => $arParams["EVENT_NAME"],
 					"LID" => SITE_ID,
 					"C_FIELDS" => $arFields,
