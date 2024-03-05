@@ -139,13 +139,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["submit"] <> '' && (!isset($_P
 				false,
 				''
 			);
-			
+			echo "<pre>";
+			var_dump($file);
+			echo "</pre>";
+
 			$fileId = CFile::SaveFile(
 				$file,
 				'/tmp',
 				false,
 				false
 			);
+
+			echo "<pre>";
+			var_dump($fileId);
+			echo "</pre>";
 			
 			$arFiles[] = $fileId;
 
